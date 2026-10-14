@@ -1,0 +1,365 @@
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Explorar: Ballena Franca Austral</title>
+<style>
+/*
+  Layout concept: una sola pieza vertical, como una ventana al mar — el video
+  arriba (el relato), el sonido abajo (la experiencia), la cola de ballena
+  de fondo ancla el mundo visual sin competir con el contenido.
+*/
+:root{
+  --bg: #0a1f2b;
+  --bg-2: #0f2c3a;
+  --foam: #eef3ef;
+  --ink: #0a1f2b;
+  --ink-soft: #5c7079;
+  --amber: #e3935a;
+  --amber-dim: #a9653a;
+  --teal: #4fb8a6;
+  --line: rgba(238,243,239,0.14);
+  --line-strong: rgba(238,243,239,0.26);
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box}
+body{
+  background: radial-gradient(ellipse 1100px 650px at 50% -8%, var(--bg-2), var(--bg) 62%);
+  color: var(--foam);
+  font-family: var(--font-body);
+  margin:0;
+  min-height:100%;
+  padding-left: max(16px, env(safe-area-inset-left,0px));
+  padding-right: max(16px, env(safe-area-inset-right,0px));
+}
+
+.tail-bg{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  z-index: 0;
+  overflow: hidden;
+}
+.tail-bg svg{ position:absolute; bottom:-6%; left:50%; transform:translateX(-50%); width: 70vw; max-width:640px; height:auto; }
+
+.wrap{
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin: 0 auto;
+  padding-block: 32px 48px;
+}
+
+header{
+  text-align:center;
+  margin-bottom: 28px;
+}
+.eyebrow{
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin: 0 0 10px;
+}
+h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 5.4vw, 38px);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  margin: 0 0 10px;
+  text-wrap: balance;
+}
+h1 em{ font-style: italic; color: var(--amber); }
+.subtitle{
+  font-size: 15px;
+  color: var(--foam);
+  opacity: 0.72;
+  max-width: 44ch;
+  margin: 0 auto;
+  line-height: 1.5;
+  text-wrap: balance;
+}
+
+.panel{
+  background: linear-gradient(175deg, var(--bg-2), #081a24);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ---------- Video ---------- */
+.video-block{ display:flex; flex-direction:column; gap:10px; }
+.video-label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.video-label .dot{ width:6px;height:6px;border-radius:50%;background:var(--amber); }
+
+.video-frame{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #061319;
+  border: 1px solid var(--line-strong);
+}
+.video-frame iframe{
+  position:absolute; inset:0; width:100%; height:100%; border:0;
+}
+/* DEV: placeholder visual mientras el video de Maxi Jonas no está publicado. Sacar este bloque .video-poster y descomentar el iframe real cuando haya ID. */
+.video-poster{
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(79,184,166,0.14), transparent 55%),
+    linear-gradient(175deg, #0c2531, #061319);
+  text-align:center;
+  padding: 16px;
+}
+.play-ring{
+  width: 54px; height:54px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-strong);
+  display:flex; align-items:center; justify-content:center;
+}
+.play-ring svg{ width:18px; height:18px; fill: var(--foam); margin-left:2px; }
+.video-poster p{
+  margin:0;
+  font-size: 12px;
+  color: var(--ink-soft);
+  max-width: 28ch;
+  line-height:1.5;
+}
+.video-poster .who{ color: var(--foam); font-weight: 600; }
+
+/* ---------- Audio ---------- */
+.audio-block{ display:flex; flex-direction:column; gap:12px; }
+.audio-question{
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(17px, 3.6vw, 20px);
+  color: var(--foam);
+  margin: 0;
+  text-align:center;
+  text-wrap: balance;
+}
+
+.player{
+  display:flex;
+  align-items:center;
+  gap: 14px;
+  background: rgba(238,243,239,0.04);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+.play-btn{
+  flex: none;
+  width: 46px; height:46px;
+  border-radius: 50%;
+  background: var(--amber);
+  border: none;
+  display:flex; align-items:center; justify-content:center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.play-btn:hover{ background: var(--amber-dim); }
+.play-btn:active{ transform: scale(0.94); }
+.play-btn svg{ width:16px; height:16px; fill: var(--ink); }
+.play-btn.playing .icon-play{ display:none; }
+.play-btn:not(.playing) .icon-pause{ display:none; }
+
+.waveform{
+  flex: 1;
+  min-width: 0;
+  display:flex;
+  align-items:center;
+  gap: 3px;
+  height: 32px;
+}
+.waveform .bar{
+  flex:1;
+  background: var(--line-strong);
+  border-radius: 2px;
+  min-width: 2px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.player.playing .waveform .bar{ background: var(--teal); }
+
+.audio-time{
+  flex: none;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: var(--ink-soft);
+  min-width: 38px;
+  text-align:right;
+}
+
+.audio-caption{
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-align:center;
+  line-height:1.5;
+}
+
+/* ---------- CTA ---------- */
+.cta-row{
+  display:flex;
+  justify-content:center;
+  padding-top: 2px;
+}
+.cta-link{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--foam);
+  padding: 11px 20px;
+  border-radius: 999px;
+  text-decoration: none;
+}
+.cta-link:hover{ background: var(--teal); }
+
+footer{
+  text-align:center;
+  margin-top: 28px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<div class="tail-bg" aria-hidden="true">
+  <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+    <path d="M200 10 C170 60 150 110 150 150 C150 150 120 130 90 150 C110 170 150 180 175 165 C180 180 190 195 200 198 C210 195 220 180 225 165 C250 180 290 170 310 150 C280 130 250 150 250 150 C250 110 230 60 200 10 Z" fill="var(--foam)"/>
+  </svg>
+</div>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">ADNSUR · Explorar</p>
+    <h1>¿Cómo suenan las <em>ballenas</em>?</h1>
+    <p class="subtitle">La voz de la ballena franca austral, la que llega cada año a las costas de Chubut.</p>
+  </header>
+
+  <div class="panel">
+    <div class="video-block">
+      <p class="video-label"><span class="dot"></span> Entrevista</p>
+      <div class="video-frame" id="videoFrame">
+        <!-- DEV: en el sitio real esto es un iframe normal de YouTube, sin restricciones. ID de prueba usado: opuKFSpxmlM. El real es aXIsDEZCxbU (todavía no estrenado). -->
+        <!-- <iframe src="https://www.youtube.com/embed/aXIsDEZCxbU" title="Maxi Jonas, fotógrafo de ballenas" allowfullscreen></iframe> -->
+        <div class="video-poster">
+          <div class="play-ring"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+          <p><span class="who">Maxi Jonas</span>, fotógrafo de ballenas, cuenta su historia con la franca austral.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="audio-block">
+      <p class="audio-question">¿Cómo suenan las ballenas?</p>
+      <div class="player" id="player">
+        <button class="play-btn" id="playBtn" aria-label="Reproducir sonido de ballena">
+          <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+        </button>
+        <div class="waveform" id="waveform"></div>
+        <span class="audio-time" id="audioTime">0:00</span>
+      </div>
+      <!-- DEV: reemplazar este src por el audio real que pasa la investigadora (ballena FRANCA AUSTRAL, no yubarta) -->
+      <audio id="whaleAudio" src="REEMPLAZAR_AUDIO_BALLENA_FRANCA_AUSTRAL.mp3" preload="none"></audio>
+      <p class="audio-caption">Grabación de campo cedida por la investigadora autora del estudio.</p>
+    </div>
+
+    <!-- DEV: este botón tiene sentido SOLO en la sección Explorar de juegos.adnsur.com.ar. Dentro de la nota, borrar todo .cta-row. -->
+    <div class="cta-row">
+      <a class="cta-link" href="LINK" target="_blank" rel="noopener">Leer el informe completo →</a>
+    </div>
+  </div>
+
+  <footer>Franca austral · Golfo Nuevo y San José</footer>
+</div>
+
+<script>
+(function(){
+  var wave = document.getElementById('waveform');
+  var bars = [];
+  var N = 40;
+  for(var i=0;i<N;i++){
+    var h = 6 + Math.round(Math.sin(i*0.7)*5 + Math.random()*10);
+    var bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.height = Math.max(4,h) + 'px';
+    wave.appendChild(bar);
+    bars.push(bar);
+  }
+
+  var audio = document.getElementById('whaleAudio');
+  var btn = document.getElementById('playBtn');
+  var player = document.getElementById('player');
+  var timeEl = document.getElementById('audioTime');
+  var raf = null;
+
+  function fmt(s){
+    s = Math.max(0, Math.floor(s||0));
+    var m = Math.floor(s/60), sec = s%60;
+    return m + ':' + (sec<10?'0':'') + sec;
+  }
+
+  function animateBars(){
+    var prog = audio.duration ? audio.currentTime / audio.duration : 0;
+    var activeCount = Math.floor(prog * bars.length);
+    bars.forEach(function(b, i){
+      b.style.opacity = i <= activeCount ? '1' : '0.45';
+    });
+    timeEl.textContent = fmt(audio.currentTime);
+    raf = requestAnimationFrame(animateBars);
+  }
+
+  btn.addEventListener('click', function(){
+    if(audio.paused){
+      audio.play().catch(function(){
+        /* El archivo de audio todavía no está cargado (placeholder del dev). */
+      });
+      btn.classList.add('playing');
+      player.classList.add('playing');
+      raf = requestAnimationFrame(animateBars);
+    } else {
+      audio.pause();
+      btn.classList.remove('playing');
+      player.classList.remove('playing');
+      cancelAnimationFrame(raf);
+    }
+  });
+
+  audio.addEventListener('ended', function(){
+    btn.classList.remove('playing');
+    player.classList.remove('playing');
+    cancelAnimationFrame(raf);
+    timeEl.textContent = '0:00';
+    bars.forEach(function(b){ b.style.opacity = '0.45'; });
+  });
+})();
+</script>
