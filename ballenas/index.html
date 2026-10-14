@@ -285,7 +285,10 @@ footer{
         <span class="audio-time" id="audioTime">0:00</span>
       </div>
       <!-- DEV: reemplazar este src por el audio real que pasa la investigadora (ballena FRANCA AUSTRAL, no yubarta) -->
-      <audio id="whaleAudio" src="audioballena.ogg" preload="none"></audio>
+      <audio id="whaleAudio" preload="none">
+        <source src="audioballena.mp3" type="audio/mpeg">
+        <source src="audioballena.ogg" type="audio/ogg">
+      </audio>
       <p class="audio-caption">Grabación de campo cedida por la investigadora autora del estudio.</p>
     </div>
 
